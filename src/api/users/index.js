@@ -7,3 +7,11 @@ export function register(user) {
         data: user
     })
 }
+
+export function login(user) {
+    return http({
+        method: 'POST',
+        url: '/login',
+        data: user
+    })
+}

@@ -12,7 +12,7 @@ const handleRegister = async () => {
   await register(registerInfo.value).then((response) => {
     if (response.status === 200) {
       let {code, message} = response.data
-      if (code === 20001) {
+      if (code === 20001||code === 20006) {
         ElMessage.error(message)
       }else if (code === 20000) {
         ElMessage.success(message)
