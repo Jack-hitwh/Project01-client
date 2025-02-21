@@ -4,14 +4,21 @@ import {ref} from "vue";
 import {login} from "@/api/users/index.js";
 import {ElMessage} from "element-plus";
 
+const loginInfo = ref({
+  username: "",
+  password: "",
+})
+
 const handleLogin = async () => {
   await login(loginInfo.value).then((response) => {
     if (response.status === 200) {
-      let {code, message} = response.data
-      if (code===20003){
+      let {code, message, data} = response.data
+      if (code === 20001) {
+        let token = data.token
+        localStorage.setItem("authorization", token)
         ElMessage.success(message)
         router.push("/")
-      }else if (code === 20004||code === 20005||code ===20002) {
+      } else if (code === 50000 || code === 50003 || code === 50004 || code === 50011) {
         ElMessage.error(message)
       }
     }
@@ -22,10 +29,6 @@ const toRegister = () => {
   router.push("/register");
 }
 
-const loginInfo = ref({
-  username: "",
-  password: "",
-})
 
 </script>
 
@@ -40,6 +43,7 @@ const loginInfo = ref({
           status-icon
           label-width="auto"
           class="demo-ruleForm"
+          @keyup.enter.native="handleLogin"
       >
         <el-form-item label="账号">
           <el-input type="text"
